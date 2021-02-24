@@ -5,7 +5,6 @@
         span IMG
       .col.q-ml-sm
         .row.full-width
-          span.text-h6 {{$store.state.user.currentUser.name}}
         .row.full-width.justify-start.items-center
           div(style=`width: 10px; height: 10px; border-radius: 40px`).bg-green.q-mr-sm
           div(style=`width: 10px; height: 10px; border: 5px solid #787878; border-radius: 40px`).q-mr-sm

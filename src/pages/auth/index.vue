@@ -33,7 +33,7 @@
 export default {
   name: 'auth',
   components: {
-    'login-register': require('components/loginRegister.vue')
+    'login-register': require('components/cauth/loginRegister.vue')
       .default
   },
   data () {

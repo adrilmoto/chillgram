@@ -1,6 +1,6 @@
 <template lang="pug">
 div(style=`maxWidth: 400px`).row
-  span {{$store.state}}
+  span {{$store.state.user}}
   .row.full-width.justify-center.text-bold.text-h5.q-mb-md
     span {{tab}} to Chillgram
   q-form(@submit="submitForm").row.full-width.justify-center.q-py-sm
@@ -24,23 +24,21 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters(['user']),
+    nextRoute () {
+      return this.$route.query.redirect || '/'
+    }
   },
   watch: {
-    // user: function (changedUser) {
-    //   if (changedUser) {
-    //     this.$router.replace(this.nextRoute)
-    //   }
-    // }
-  },
-  mounted () {
-    this.handleAuthStateChanged()
   },
   methods: {
-    ...mapActions('user', ['registerUser', 'loginUser', 'handleAuthStateChanged']),
-    submitForm () {
+    ...mapActions('user', ['registerUser', 'loginUser']),
+    async submitForm () {
       if (this.tab === 'Login') {
-        this.loginUser(this.formData)
+        try {
+          await this.$store.dispatch('user/loginUser', this.formData)
+        } catch (error) {
+          console.log('login error', error)
+        }
       } else {
         this.registerUser(this.formData)
       }

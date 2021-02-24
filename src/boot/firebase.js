@@ -1,5 +1,6 @@
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import firebase from 'firebase/app'
+// import store from "./store";
 // If you are using v7 or any earlier version of the JS SDK, you should import firebase using namespace import
 // import * as firebase from "firebase/app"
 

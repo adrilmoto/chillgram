@@ -1,20 +1,19 @@
 <template lang="pug">
-q-layout(view="hHh lpR fFf").window-height
+q-layout(v-if="$store.state" view="hHh lpR fFf").window-height
   q-header()
     c-header
-    span {{$store.state}}
+    span {{$store.state.user.userDetails}}
   q-drawer(show-if-above v-model="left" side="left" :content-style="{ backgroundColor: '#3f0e40' }" :width="200" bordered).text-accent
     c-menu
   q-page-container
-    router-view()
+    router-view
 </template>
 
 <script>
-import cHeader from 'components/cHeader'
-import cMenu from 'components/cMenu'
-import { mapActions, mapState } from 'vuex'
+import cHeader from 'components/cheader/cHeader'
+import cMenu from 'components/cmenu/cMenu'
 export default {
-  name: 'main',
+  name: 'mainPage',
   components: { cHeader, cMenu },
   data () {
     return {
@@ -22,13 +21,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('user', ['user'])
   },
   methods: {
-    ...mapActions('user', ['handleAuthStateChanged'])
   },
   mounted () {
-    this.handleAuthStateChanged()
   }
 }
 </script>

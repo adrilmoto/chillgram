@@ -1,5 +1,5 @@
 <template lang="pug">
-.row.window-height
+.row.fit
   h1 home
 </template>
 <script>

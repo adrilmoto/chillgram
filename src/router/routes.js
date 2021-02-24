@@ -1,21 +1,15 @@
 
 const routes = [
   {
-    path: '/home',
-    component: () => import('layouts/main.vue'),
+    path: '/',
+    component: () => import('layouts/mainPage.vue'),
     children: [
       { path: '', component: () => import('pages/home/index.vue') },
-      { path: 'threads', component: () => import('pages/threads/index.vue') },
-      { path: 'dms', component: () => import('pages/dms/index.vue') },
-      { path: 'mentions', component: () => import('pages/mentions/index.vue') },
-      { path: 'items', component: () => import('pages/items/index.vue') },
-      { path: 'dms', component: () => import('pages/dms/index.vue') },
-      { path: 'directs', component: () => import('pages/directs/index.vue') },
-      { path: 'chat', component: () => import('pages/chat/index.vue') }
+      { path: '/chat/:otherUserId', component: () => import('pages/chat/index.vue') }
     ]
   },
   {
-    path: '/',
+    path: '/login',
     component: () => import('layouts/loginLayout.vue'),
     children: [
       { path: '', component: () => import('pages/auth/index.vue') }

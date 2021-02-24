@@ -1,13 +1,13 @@
 <template lang="pug">
-q-page.row.column.br
-  q-banner().bg-grey-4.text-center
-    span User is offline
-  span {{messages}}
+q-page.row.column
+  q-banner(v-if="!otherUsers.online").bg-grey-4.text-center
+    span {{otherUsers.name}} is offline
+  span {{otherUsers}}
   div.col.column.justify-end.q-pa-md
     q-chat-message(
       v-for="message in messages"
       :key="message.text"
-      :name="message.from"
+      :name="message.from == 'me' ? userDetails.name : otherUsers.name"
       :text="[message.text]"
       :sent="message.from == 'me' ? true : false")
   q-footer(elavated="true")
@@ -28,38 +28,45 @@ q-page.row.column.br
           icon="send").row
 </template>
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'chat',
   data () {
     return {
-      newMessage: '',
-      messages: [
-        {
-          text: 'Hey, Jim, how are you?',
-          from: 'me'
-        },
-        {
-          text: 'Good thanks, Danny! How are you?',
-          from: 'them'
-        },
-        {
-          text: 'Pretty good!',
-          from: 'me'
-        }
-      ]
+      newMessage: ''
+    }
+  },
+  computed: {
+    ...mapState('user', ['messages', 'userDetails']),
+    otherUsers () {
+      if (this.$store.state.user.users[this.$route.params.otherUserId]) {
+        return this.$store.state.user.users[this.$route.params.otherUserId]
+      } else return {}
     }
   },
   methods: {
+    ...mapActions('user', ['firebaseStopGetMessages', 'firebaseSendMessage']),
     sendMessage () {
       if (this.newMessage !== '') {
         console.log('sending')
-        this.messages.push({
-          text: this.newMessage,
-          from: 'me'
+        this.firebaseSendMessage({
+          message: {
+            text: this.newMessage,
+            from: 'me'
+          },
+          otherUserId: this.$route.params.otherUserId
         })
         this.newMessage = ''
       } else console.log('notMessage')
     }
+  },
+  watch: {
+    $route (to, from) {
+      this.firebaseStopGetMessages(this.$route.params.otherUserId)
+    }
+  },
+  created () {
+    this.firebaseStopGetMessages(this.$route.params.otherUserId)
   }
 }
 </script>
