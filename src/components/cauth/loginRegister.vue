@@ -1,6 +1,6 @@
 <template lang="pug">
 div(style=`maxWidth: 400px`).row
-  span {{$store.state.user}}
+  span {{$store.state.user.userDetails}}
   .row.full-width.justify-center.text-bold.text-h5.q-mb-md
     span {{tab}} to Chillgram
   q-form(@submit="submitForm").row.full-width.justify-center.q-py-sm

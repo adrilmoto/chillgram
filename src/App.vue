@@ -17,6 +17,13 @@ export default {
 </script>
 
 <style lang="sass">
+::-webkit-scrollbar
+  width: 6px
+  height: 0px !important
+::-webkit-scrollbar-thumb
+  background: #252837
+  border-radius: 5px
+  broder: 4px solid black
 .br
   border: 1px solid red
 </style>

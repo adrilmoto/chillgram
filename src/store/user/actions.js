@@ -59,7 +59,6 @@ export function handleAuthStateChanged ({ commit, dispatch, state }) {
           online: true
         }
       })
-      dispatch('firebaseGetUsers')
     } else {
       // user logout
       dispatch('firebaseUpdateUser', {
@@ -73,8 +72,12 @@ export function handleAuthStateChanged ({ commit, dispatch, state }) {
   })
 }
 // USERS
-
-export function firebaseGetUsers ({ commit }) {
+export const init = async ({ dispatch }) => {
+  await dispatch('firebaseGetUsers')
+  return true
+}
+export const firebaseGetUsers = async ({ commit, state }) => {
+  if (!state.userDetails) return
   firebaseDb.ref('users').on('child_added', snapshot => {
     const userDetails = snapshot.val()
     const userId = snapshot.key
@@ -95,17 +98,34 @@ export function firebaseGetUsers ({ commit }) {
 
 // CHATS
 export function firebaseSendMessage ({ state }, payload) {
-  firebaseDb.ref('chats/' + state.userDetails.userId + '/' + payload.otherUserId).push(payload.message)
+  const myChatRef = firebaseDb.ref('chats/' + state.userDetails.userId + '/' + payload.otherUserId)
+  const themChatRef = firebaseDb.ref('chats/' + payload.otherUserId + '/' + state.userDetails.userId)
+  myChatRef.push({
+    author: {
+      name: state.userDetails.name,
+      id: state.userDetails.userId
+    },
+    text: payload.message.text
+  })
   payload.message.from = 'them'
-  firebaseDb.ref('chats/' + payload.otherUserId + '/' + state.userDetails.userId).push(payload.message)
+  themChatRef.push({
+    author: {
+      name: state.userDetails.name,
+      id: state.userDetails.userId
+    },
+    text: payload.message.text
+  })
   console.log(payload)
 }
 
 export const firebaseStopGetMessages = ({ state, commit }, otherUserId) => {
   const userId = state.userDetails.userId
   const messagesRef = firebaseDb.ref('chats/' + userId + '/' + otherUserId)
-  messagesRef.off('child_added')
-  commit('clearMessages')
+  if (state.messages) {
+    console.log('yes messages')
+    messagesRef.off('child_added')
+    commit('clearMessages')
+  }
   messagesRef.on('child_added', snapshot => {
     const messageDetails = snapshot.val()
     const messageId = snapshot.key
@@ -114,10 +134,4 @@ export const firebaseStopGetMessages = ({ state, commit }, otherUserId) => {
       messageDetails
     })
   })
-}
-export function firabaseStopGettingMessages ({ state, commit }, otherUserId) {
-  const userId = state.userDetails.userId
-  const messagesRef = firebaseDb.ref('chats/' + userId + '/' + otherUserId)
-  messagesRef.off('child_added')
-  commit('clearMessages')
 }

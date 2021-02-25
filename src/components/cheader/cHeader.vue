@@ -1,6 +1,6 @@
 <template lang="pug">
-div(style=`background-color: #350d36`).row.full-width.justify-center.items-center
-  div(style=`maxWidth: `).row.full-width.justify-between.items-center.q-px-md.q-py-xs.q-pb-xs
+div(style=`minHeight: 40px; background-color: #350d36`).row.full-width.justify-center.items-center
+  div.row.full-width.justify-between.items-center.q-px-md.q-py-xs.q-pb-xs
     div.row
     q-icon(name="access_time" size="sm" color="grey")
     div(@click="openUser()").cursor-pointer

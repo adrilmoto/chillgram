@@ -8,7 +8,7 @@
   style="padding: 0"
   ).row.full-width.justify-start.items-center.cursor-pointer.q-pl-sm
     div(style=`width: 10px; height: 10px; border-radius: 40px` :class="[user.online ? 'bg-green' : 'bg-grey-5']").q-mr-sm
-    span {{ user.name }}
+    span {{ userId }}
 </template>
 <script>
 // import { mapActions } from 'vuex'
@@ -16,11 +16,16 @@ export default {
   name: 'usersList',
   props: ['users'],
   computed: {
+    usersId () {
+      const idList = Object.keys(this.users)
+      return idList
+    }
   },
   methods: {
     // ...mapActions('user', ['firebaseGetMessages']),
     openChat (id) {
-      this.$router.push('/chat/' + id)
+      this.$router.push('/chat/' + id).catch(() => {})
+      // this.firebaseGetMessages(id)
     }
   }
 }
